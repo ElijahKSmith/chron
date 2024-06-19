@@ -9,10 +9,19 @@ import {
   NavbarMenuItem,
   NavbarMenuToggle,
 } from "@nextui-org/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function ChronNavbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  async function closeSplash() {
+    const invoke = (await import("@tauri-apps/api/tauri")).invoke;
+    invoke("close_splashscreen");
+  }
+
+  useEffect(() => {
+    closeSplash();
+  }, []);
 
   return (
     <Navbar onMenuOpenChange={setIsMenuOpen} maxWidth="full">

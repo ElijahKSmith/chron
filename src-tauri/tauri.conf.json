@@ -29,7 +29,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
+      "identifier": "com.chron.dev",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
@@ -59,7 +59,16 @@
         "height": 600,
         "resizable": true,
         "title": "chron",
-        "width": 800
+        "width": 800,
+        "url": "timers",
+        "visible": false
+      },
+      {
+        "width": 400,
+        "height": 200,
+        "decorations": false,
+        "url": "splashscreen.html",
+        "label": "splashscreen"
       }
     ]
   }
