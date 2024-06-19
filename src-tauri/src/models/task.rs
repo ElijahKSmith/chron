@@ -6,35 +6,35 @@ use serde::Serialize;
 #[derive(Queryable, Serialize)]
 pub struct Task {
     pub id: i32,
-    pub gameId: i32,
+    pub game_id: i32,
     pub name: String,
-    pub resetType: String,
-    pub completedTime: Option<NaiveDateTime>,
-    pub nextReset: Option<NaiveDateTime>,
-    pub deletedAt: Option<NaiveDateTime>,
+    pub reset_type: String,
+    pub completed_time: Option<NaiveDateTime>,
+    pub next_reset: Option<NaiveDateTime>,
+    pub deleted_at: Option<NaiveDateTime>,
 }
 
 #[derive(Insertable)]
 #[diesel(table_name = tasks)]
 pub struct NewTask {
     pub id: i32,
-    pub gameId: i32,
+    pub game_id: i32,
     pub name: String,
-    pub resetType: String,
-    pub completedTime: NaiveDateTime,
-    pub nextReset: NaiveDateTime,
+    pub reset_type: String,
+    pub completed_time: NaiveDateTime,
+    pub next_reset: NaiveDateTime,
 }
 
 impl From<NewTask> for Task {
     fn from(new_task: NewTask) -> Self {
         Task {
             id: new_task.id,
-            gameId: new_task.gameId,
+            game_id: new_task.gameId,
             name: new_task.name,
-            resetType: new_task.resetType,
-            completedTime: Some(new_task.completedTime),
-            nextReset: Some(new_task.nextReset),
-            deletedAt: None,
+            reset_type: new_task.resetType,
+            completed_time: Some(new_task.completedTime),
+            next_reset: Some(new_task.nextReset),
+            deleted_at: None,
         }
     }
 }

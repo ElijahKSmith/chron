@@ -4,25 +4,25 @@ diesel::table! {
     games (id) {
         id -> Integer,
         name -> Text,
-        dailyResetTime -> Text,
-        weeklyResetDay -> Nullable<Text>,
-        deletedAt -> Nullable<Timestamp>,
+        daily_reset_time -> Text,
+        weekly_reset_day -> Nullable<Text>,
+        deleted_at -> Nullable<Timestamp>,
     }
 }
 
 diesel::table! {
     tasks (id) {
         id -> Integer,
-        gameId -> Integer,
+        game_id -> Integer,
         name -> Text,
-        resetType -> Text,
-        completedTime -> Nullable<Timestamp>,
-        nextReset -> Nullable<Timestamp>,
-        deletedAt -> Nullable<Timestamp>,
+        reset_type -> Text,
+        completed_time -> Nullable<Timestamp>,
+        next_reset -> Nullable<Timestamp>,
+        deleted_at -> Nullable<Timestamp>,
     }
 }
 
-diesel::joinable!(tasks -> games (gameId));
+diesel::joinable!(tasks -> games (game_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
     games,

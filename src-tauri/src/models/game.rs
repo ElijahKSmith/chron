@@ -7,9 +7,9 @@ use serde::Serialize;
 pub struct Game {
     pub id: i32,
     pub name: String,
-    pub dailyResetTime: String,
-    pub weeklyResetDay: Option<String>,
-    pub deletedAt: Option<NaiveDateTime>,
+    pub daily_reset_time: String,
+    pub weekly_reset_day: Option<String>,
+    pub deleted_at: Option<NaiveDateTime>,
 }
 
 #[derive(Insertable)]
@@ -17,8 +17,8 @@ pub struct Game {
 pub struct NewGame {
     pub id: i32,
     pub name: String,
-    pub dailyResetTime: String,
-    pub weeklyResetDay: String,
+    pub daily_reset_time: String,
+    pub weekly_reset_day: String,
 }
 
 impl From<NewGame> for Game {
@@ -26,9 +26,9 @@ impl From<NewGame> for Game {
         Game {
             id: new_game.id,
             name: new_game.name,
-            dailyResetTime: new_game.dailyResetTime,
-            weeklyResetDay: Some(new_game.weeklyResetDay),
-            deletedAt: None,
+            daily_reset_time: new_game.daily_reset_time,
+            weekly_reset_day: Some(new_game.weekly_reset_day),
+            deleted_at: None,
         }
     }
 }
