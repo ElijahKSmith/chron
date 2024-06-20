@@ -1,9 +1,9 @@
 use crate::schema::games;
 use chrono::NaiveDateTime;
-use diesel::{Insertable, Queryable};
+use diesel::{Insertable, Queryable, Selectable};
 use serde::Serialize;
 
-#[derive(Queryable, Serialize)]
+#[derive(Queryable, Selectable, Serialize)]
 pub struct Game {
     pub id: i32,
     pub name: String,
