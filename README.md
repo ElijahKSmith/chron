@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# chron
 
-## Getting Started
+Tracking for video game resets
 
-First, run the development server:
+## Table of Contents
+
+- [What is chron?](#what-is-chron)
+- [Installation guide](#installation-guide)
+- [How to support the project](#how-to-support-the-project)
+
+## What is chron?
+
+chron is a tool to help you track your resets in different video games.
+
+A reset is the designated date and time that an activity in a game is either doable again or allowed to reward you again. Most games with these types of activities will typically follow a daily and weekly reset system, for example login rewards or raid bosses.
+
+Resets are not standardized across games and differ depending on a variety of factors such as the server region and content release schedule. The problem is, it can be difficult to track what you've already done before the next reset occurs, especially if you play several games.
+
+Enter chron, a solution to that problem. chron allows you to input your tasks and track their completion status, which will reset at that game's specified reset intervals. Gone are the days of forgetting your dailies!
+
+## Installation guide
+
+Prior to release 1.0, chron must be built from source.
+
+### Building from source
+
+1. Install the prerequisites:
+   1. [NodeJS](https://nodejs.org/en/download/)
+   2. [Tauri](https://tauri.app/v1/guides/getting-started/prerequisites)
+2. Clone the repository. Change directory into the repository root.
+3. Install the dependencies:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Build the application:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run tauri build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## How to support the project
 
-## Learn More
+If you like chron, consider starring the repo and sharing it with your friends!
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+If you want to contribute to chron, please review the [code of conduct](CODE_OF_CONDUCT.md) and [contribution guidelines](CONTRIBUTING.md) before making a pull request.
