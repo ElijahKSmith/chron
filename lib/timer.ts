@@ -1,10 +1,20 @@
 import { addDays, addWeeks, isAfter, parseISO, set, setDay } from "date-fns";
+
+export function formatDailyTime(hours: number, minutes: number): string {
+  return (
+    hours.toString().padStart(2, "0") +
+    ":" +
+    minutes.toString().padStart(2, "0") +
+    ":00.000Z"
+  );
+}
+
 /**
  * Determines if the given reset time has happened on the current UTC date
  *
  * @param dailyTime In the format of `HH:mm:ss.sssZ`
  *
- * See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#date_time_string_format
+ * @note See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#date_time_string_format
  */
 export function hasResetHappenedToday(dailyTime: string): boolean {
   const parsedTime = parseISO(`1970-01-01T${dailyTime}`);
@@ -24,7 +34,7 @@ export function hasResetHappenedToday(dailyTime: string): boolean {
  * @param dailyTime In the format of `HH:mm:ss.sssZ`
  * @param weeklyDay ISO date of the week (0-6)
  *
- * See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#date_time_string_format
+ * @note See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#date_time_string_format
  */
 export function hasResetHappenedThisWeek(
   dailyTime: string,
@@ -49,7 +59,7 @@ export function hasResetHappenedThisWeek(
  *
  * @param dailyTime In the format of `HH:mm:ss.sssZ`
  *
- * See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#date_time_string_format
+ * @note See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#date_time_string_format
  */
 export function getNextDailyReset(dailyTime: string): Date {
   const parsedTime = parseISO(`1970-01-01T${dailyTime}`);
@@ -73,7 +83,7 @@ export function getNextDailyReset(dailyTime: string): Date {
  * @param dailyTime In the format of `HH:mm:ss.sssZ`
  * @param weeklyDay ISO date of the week (0-6)
  *
- * See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#date_time_string_format
+ * @note See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#date_time_string_format
  */
 export function getNextWeeklyReset(dailyTime: string, weeklyDay: number): Date {
   const parsedTime = parseISO(`1970-01-01T${dailyTime}`);

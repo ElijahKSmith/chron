@@ -15,25 +15,22 @@ import { Label } from "@chron/components/ui/label";
 import { Textarea } from "@chron/components/ui/textarea";
 import { useCallback, useState } from "react";
 import { RadioGroup, RadioGroupItem } from "@chron/components/ui/radio-group";
+import { TaskType } from "@chron/lib/task";
 
 export function TaskDialog({
   gameTitle,
   addTask,
 }: {
   gameTitle: string;
-  addTask: (
-    title: string,
-    type: "daily" | "weekly",
-    description: string
-  ) => void;
+  addTask: (title: string, type: TaskType, description: string) => void;
 }) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [title, setTitle] = useState("");
-  const [type, setType] = useState<"daily" | "weekly">("daily");
+  const [type, setType] = useState<TaskType>("daily");
   const [description, setDescription] = useState("");
 
   const handleSubmit = useCallback(() => {
-    addTask(title, type, description);
+    addTask(title.trim(), type, description.trim());
 
     setDialogOpen(false);
   }, [addTask, title, type, description]);
@@ -74,7 +71,8 @@ export function TaskDialog({
             </Label>
             <RadioGroup
               value={type}
-              onValueChange={(e: "daily" | "weekly") => setType(e)}
+              onValueChange={(e: TaskType) => setType(e)}
+              className="col-span-3"
             >
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="daily" id="r1" />
@@ -99,7 +97,11 @@ export function TaskDialog({
           </div>
         </div>
         <DialogFooter>
-          <Button type="submit" onClick={handleSubmit}>
+          <Button
+            type="submit"
+            disabled={title.trim().length < 1}
+            onClick={handleSubmit}
+          >
             Save
           </Button>
         </DialogFooter>

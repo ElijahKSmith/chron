@@ -7,44 +7,37 @@ import {
   CardTitle,
 } from "@chron/components/ui/card";
 import { Button } from "@chron/components/ui/button";
-import { Check, Trash, X } from "lucide-react";
+import { Check, X } from "lucide-react";
+import { TaskItem } from "@chron/lib/task";
+import DeleteDialog from "@chron/components/chron/delete-item";
+import { cn } from "@chron/lib/utils";
 
 export default function Task({
-  id,
-  title,
-  type,
-  description,
-  done,
+  task,
   setDone,
   deleteTask,
 }: {
-  id: string;
-  title: string;
-  type: "daily" | "weekly";
-  description: string;
-  done: boolean;
+  task: Omit<TaskItem, "order">;
   setDone: (id: string, value: boolean) => void;
   deleteTask: (id: string) => void;
 }) {
   return (
-    <Card>
+    <Card className={cn(task.done ? "line-through" : "")}>
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
+        <CardTitle>{task.title}</CardTitle>
         <CardDescription>
-          {id}
-          {done.toString()}
-          {type[0].toUpperCase() + type.substring(1)}
+          {task.type[0].toUpperCase() + task.type.substring(1)}
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <p>{description}</p>
+        <p>{task.description}</p>
       </CardContent>
       <CardFooter className="flex flex-row place-content-between">
         <div>
           <Button
             variant="ghost"
             className="text-green-500"
-            onClick={() => setDone(id, true)}
+            onClick={() => setDone(task.id, true)}
           >
             <Check />
             <span className="sr-only">Mark Done</span>
@@ -52,21 +45,18 @@ export default function Task({
           <Button
             variant="ghost"
             className="text-red-500"
-            onClick={() => setDone(id, false)}
+            onClick={() => setDone(task.id, false)}
           >
             <X />
             <span className="sr-only">Mark Undone</span>
           </Button>
         </div>
         <div>
-          <Button
-            variant="ghost"
-            className="text-red-700"
-            onClick={() => deleteTask(id)}
-          >
-            <Trash />
-            <span className="sr-only">Delete</span>
-          </Button>
+          <DeleteDialog
+            type="Task"
+            title={task.title}
+            deleteItem={() => deleteTask(task.id)}
+          />
         </div>
       </CardFooter>
     </Card>

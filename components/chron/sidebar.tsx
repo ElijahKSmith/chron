@@ -8,29 +8,19 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@chron/components/ui/sidebar";
-import { LayoutDashboard, Moon, Settings, Sun } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@chron/components/ui/dropdown-menu";
-import { Button } from "@chron/components/ui/button";
-import { useTheme } from "next-themes";
+import { LayoutDashboard, Settings } from "lucide-react";
 
 export default function ChronSidebar() {
-  const { setTheme } = useTheme();
-
   const items = [
     {
       title: "Dashboard",
       icon: LayoutDashboard,
-      url: "#",
+      url: "/",
     },
     {
       title: "Settings",
       icon: Settings,
-      url: "#",
+      url: "settings",
     },
   ];
 
@@ -50,31 +40,10 @@ export default function ChronSidebar() {
           ))}
         </SidebarMenu>
       </SidebarContent>
-      <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="icon">
-                  <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                  <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-                  <span className="sr-only">Toggle Theme</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => setTheme("light")}>
-                  Light
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setTheme("dark")}>
-                  Dark
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setTheme("system")}>
-                  System
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarMenuItem>
-        </SidebarMenu>
+      <SidebarFooter className="text-xs text-gray-500">
+        <a href="https://github.com/ElijahKSmith/chron" target="_blank">
+          ⭐ chron on GitHub!
+        </a>
       </SidebarFooter>
     </Sidebar>
   );
