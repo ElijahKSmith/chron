@@ -9,6 +9,11 @@
     "beforeDevCommand": "npm run dev",
     "beforeBuildCommand": "npm run build"
   },
+  "plugins": {
+    "sql": {
+      "preload": ["sqlite:chron.db"]
+    }
+  },
   "app": {
     "windows": [
       {

@@ -24,6 +24,14 @@ import { GameItem } from "@chron/lib/game";
 import DeleteDialog from "@chron/components/chron/delete-item";
 import { useTimer } from "@chron/components/chron/timer-context";
 import { isAfter } from "date-fns";
+import { Spinner } from "@chron/components/ui/spinner";
+import {
+  createTask,
+  deleteTask,
+  getTasksByGameId,
+  updateTaskDone,
+  updateTaskOrder,
+} from "@chron/lib/database";
 
 export default function Game({
   game,
@@ -32,37 +40,19 @@ export default function Game({
   game: Omit<GameItem, "order">;
   deleteGame: (id: string) => void;
 }) {
+  const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(true);
   const [nextDaily, setNextDaily] = useState<Date | null>(null);
   const [nextWeekly, setNextWeekly] = useState<Date | null>(null);
+  const [tasks, setTasks] = useState<TaskItem[]>([]);
+
   const { currentTimestamp } = useTimer();
 
-  const [items, setItems] = useState<TaskItem[]>([
-    {
-      id: v4(),
-      order: 0,
-      title: "Example Daily",
-      type: "daily",
-      description: "Go to the thing and turn in the thing",
-      done: false,
-      nextReset: null,
-    },
-    {
-      id: v4(),
-      order: 1,
-      title: "Example Weekly",
-      type: "weekly",
-      description: "Farm the thing then go to thr thing and turn in the thing",
-      done: true,
-      nextReset: new Date(Date.now() + 604800000),
-    },
-  ]);
-
-  const reorderItems = useCallback((a: TaskItem[]) => {
+  const reorderTasks = useCallback((a: TaskItem[]) => {
     return a.map<TaskItem>((item, i) => ({ ...item, order: i }));
   }, []);
 
-  const sortItems = useCallback((a: TaskItem, b: TaskItem) => {
+  const sortTasks = useCallback((a: TaskItem, b: TaskItem) => {
     if (a.order < b.order) {
       return -1;
     } else if (a.order > b.order) {
@@ -76,7 +66,7 @@ export default function Game({
     (title: string, type: TaskType, description: string) => {
       const newItem: TaskItem = {
         id: v4(),
-        order: (items[items.length - 1]?.order ?? 0) + 1,
+        order: (tasks[tasks.length - 1]?.order ?? 0) + 1,
         title,
         type,
         description,
@@ -84,21 +74,32 @@ export default function Game({
         nextReset: null,
       };
 
-      setItems((prev) => prev.concat([newItem]));
+      setTasks((prev) => prev.concat([newItem]));
+
+      createTask(newItem, game.id).catch(console.error);
     },
-    [items]
+    [tasks, game]
   );
 
-  const deleteTask = useCallback(
+  const removeTask = useCallback(
     (id: string) => {
-      setItems((prev) => reorderItems(prev.filter((item) => item.id !== id)));
+      const newTasks = reorderTasks(tasks.filter((task) => task.id !== id));
+      setTasks(newTasks);
+
+      deleteTask(id)
+        .then(() =>
+          Promise.all(
+            newTasks.map(async (task, i) => updateTaskOrder(task.id, i))
+          )
+        )
+        .catch(console.error);
     },
-    [reorderItems]
+    [tasks, reorderTasks]
   );
 
   const setDone = useCallback(
     (id: string, value: boolean) => {
-      const item = items.find((item) => item.id === id);
+      const item = tasks.find((item) => item.id === id);
 
       if (item) {
         item.done = value;
@@ -109,45 +110,58 @@ export default function Game({
           item.nextReset = null;
         }
 
-        setItems((prev) =>
+        setTasks((prev) =>
           prev
             .filter((item) => item.id !== id)
             .concat([item])
-            .sort(sortItems)
+            .sort(sortTasks)
         );
+
+        updateTaskDone(item.id, item.done, item.nextReset).catch(console.error);
       }
     },
-    [items, nextDaily, nextWeekly, sortItems]
+    [tasks, nextDaily, nextWeekly, sortTasks]
   );
 
   useEffect(() => {
-    const changedItems: TaskItem[] = [];
+    getTasksByGameId(game.id)
+      .then((tasks) => setTasks(tasks))
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, [game]);
 
-    items.forEach((item) => {
+  useEffect(() => {
+    const updatedTasks: TaskItem[] = [];
+
+    tasks.forEach((task) => {
       if (
-        item.done &&
-        item.nextReset &&
-        isAfter(currentTimestamp, item.nextReset)
+        task.done &&
+        task.nextReset &&
+        isAfter(currentTimestamp, task.nextReset)
       ) {
-        item.nextReset = null;
-        item.done = false;
-        changedItems.push(item);
+        task.nextReset = null;
+        task.done = false;
+        updatedTasks.push(task);
       }
     });
 
-    if (changedItems.length > 0) {
-      const changedIds = changedItems.map((changedItem) => changedItem.id);
+    if (updatedTasks.length > 0) {
+      const updatedIds = updatedTasks.map((task) => task.id);
 
-      console.log(items, changedItems, changedIds);
-
-      setItems((prev) =>
+      setTasks((prev) =>
         prev
-          .filter((item) => !changedIds.includes(item.id))
-          .concat(changedItems)
-          .sort(sortItems)
+          .filter((task) => !updatedIds.includes(task.id))
+          .concat(updatedTasks)
+          .sort(sortTasks)
       );
+
+      Promise.all(
+        updatedTasks.map(async (task) =>
+          updateTaskDone(task.id, task.done, task.nextReset)
+        )
+      ).catch((e) => console.error(e));
     }
-  }, [items, currentTimestamp, sortItems]);
+  }, [tasks, currentTimestamp, sortTasks]);
 
   return (
     <Card>
@@ -173,21 +187,23 @@ export default function Game({
                   <span className="sr-only">Toggle</span>
                 </Button>
               </CollapsibleTrigger>
-              <h4>{items.length} Tasks</h4>
+              <h4>{tasks.length} Tasks</h4>
             </div>
             <div>
               <TaskDialog gameTitle={game.title} addTask={addTask} />
             </div>
           </div>
           <CollapsibleContent className="flex flex-col gap-2 pt-2">
-            {items.map((item) => (
-              <Task
-                key={`task-${item.id}`}
-                task={item}
-                setDone={setDone}
-                deleteTask={deleteTask}
-              />
-            ))}
+            {loading && <Spinner />}
+            {!loading &&
+              tasks.map((item) => (
+                <Task
+                  key={`task-${item.id}`}
+                  task={item}
+                  setDone={setDone}
+                  deleteTask={removeTask}
+                />
+              ))}
           </CollapsibleContent>
         </Collapsible>
       </CardContent>

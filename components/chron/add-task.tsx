@@ -100,7 +100,7 @@ export function TaskDialog({
           <Button
             type="submit"
             disabled={title.trim().length < 1}
-            onClick={handleSubmit}
+            onClick={() => handleSubmit()}
           >
             Save
           </Button>

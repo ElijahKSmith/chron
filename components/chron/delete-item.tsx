@@ -25,8 +25,8 @@ export default function DeleteDialog({
   const [open, setOpen] = useState(false);
 
   const handleConfirm = useCallback(() => {
-    setOpen(false);
     deleteItem();
+    setOpen(false);
   }, [deleteItem]);
 
   return (
