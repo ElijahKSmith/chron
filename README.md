@@ -1,6 +1,6 @@
 # chron
 
-Tracking for video game resets
+Tracking for your video game resets
 
 ## Table of Contents
 
