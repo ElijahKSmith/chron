@@ -32,6 +32,7 @@ import {
   updateTaskDone,
   updateTaskOrder,
 } from "@chron/lib/database";
+import { error } from "@tauri-apps/plugin-log";
 
 export default function Game({
   game,
@@ -76,7 +77,7 @@ export default function Game({
 
       setTasks((prev) => prev.concat([newItem]));
 
-      createTask(newItem, game.id).catch(console.error);
+      createTask(newItem, game.id).catch(error);
     },
     [tasks, game]
   );
@@ -92,7 +93,7 @@ export default function Game({
             newTasks.map(async (task, i) => updateTaskOrder(task.id, i))
           )
         )
-        .catch(console.error);
+        .catch(error);
     },
     [tasks, reorderTasks]
   );
@@ -117,7 +118,7 @@ export default function Game({
             .sort(sortTasks)
         );
 
-        updateTaskDone(item.id, item.done, item.nextReset).catch(console.error);
+        updateTaskDone(item.id, item.done, item.nextReset).catch(error);
       }
     },
     [tasks, nextDaily, nextWeekly, sortTasks]
@@ -126,7 +127,7 @@ export default function Game({
   useEffect(() => {
     getTasksByGameId(game.id)
       .then((tasks) => setTasks(tasks))
-      .catch(console.error)
+      .catch(error)
       .finally(() => setLoading(false));
   }, [game]);
 
@@ -159,7 +160,7 @@ export default function Game({
         updatedTasks.map(async (task) =>
           updateTaskDone(task.id, task.done, task.nextReset)
         )
-      ).catch((e) => console.error(e));
+      ).catch(error);
     }
   }, [tasks, currentTimestamp, sortTasks]);
 
