@@ -50,11 +50,13 @@ export default function Dashboard() {
       const newGames = reorderGames(games.filter((game) => game.id !== id));
       setGames(newGames);
 
-      deleteGame(id).then(() =>
-        Promise.all(
-          newGames.map(async (game, i) => updateGameOrder(game.id, i))
+      deleteGame(id)
+        .then(() =>
+          Promise.all(
+            newGames.map(async (game, i) => updateGameOrder(game.id, i))
+          )
         )
-      );
+        .catch(error);
     },
     [games, reorderGames]
   );

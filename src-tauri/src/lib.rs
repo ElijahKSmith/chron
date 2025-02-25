@@ -48,6 +48,13 @@ pub fn run() {
                 app.handle().plugin(
                     tauri_plugin_log::Builder::default()
                         .level(log::LevelFilter::Info)
+                        .target(tauri_plugin_log::Target::new(
+                            tauri_plugin_log::TargetKind::LogDir {
+                                file_name: Some("chron".to_string()),
+                            },
+                        ))
+                        .max_file_size(50_000)
+                        .rotation_strategy(tauri_plugin_log::RotationStrategy::KeepOne)
                         .build(),
                 )?;
             }
