@@ -12,6 +12,7 @@ import {
   deleteGame,
   updateGameOrder,
 } from "@chron/lib/database";
+import { error } from "@tauri-apps/plugin-log";
 
 export default function Dashboard() {
   const [loading, setLoading] = useState(true);
@@ -39,7 +40,7 @@ export default function Dashboard() {
 
       setGames((prev) => prev.concat([newItem]));
 
-      createGame(newItem).catch(console.error);
+      createGame(newItem).catch(error);
     },
     [games]
   );
@@ -49,11 +50,13 @@ export default function Dashboard() {
       const newGames = reorderGames(games.filter((game) => game.id !== id));
       setGames(newGames);
 
-      deleteGame(id).then(() =>
-        Promise.all(
-          newGames.map(async (game, i) => updateGameOrder(game.id, i))
+      deleteGame(id)
+        .then(() =>
+          Promise.all(
+            newGames.map(async (game, i) => updateGameOrder(game.id, i))
+          )
         )
-      );
+        .catch(error);
     },
     [games, reorderGames]
   );
@@ -61,7 +64,7 @@ export default function Dashboard() {
   useEffect(() => {
     getAllGames()
       .then((games) => setGames(games))
-      .catch(console.error)
+      .catch(error)
       .finally(() => setLoading(false));
   }, []);
 
