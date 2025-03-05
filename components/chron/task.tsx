@@ -11,16 +11,21 @@ import { Check, X } from "lucide-react";
 import { TaskItem } from "@chron/lib/task";
 import DeleteDialog from "@chron/components/chron/delete-item";
 import { cn } from "@chron/lib/utils";
+import EditTaskDialog from "./edit-task";
+
+interface TaskProps {
+  task: Omit<TaskItem, "order">;
+  setDone: (id: string, value: boolean) => void;
+  refetchTask: (id: string) => void;
+  deleteTask: (id: string) => void;
+}
 
 export default function Task({
   task,
   setDone,
+  refetchTask,
   deleteTask,
-}: {
-  task: Omit<TaskItem, "order">;
-  setDone: (id: string, value: boolean) => void;
-  deleteTask: (id: string) => void;
-}) {
+}: TaskProps) {
   return (
     <Card className={cn(task.done ? "line-through" : "")}>
       <CardHeader>
@@ -52,6 +57,7 @@ export default function Task({
           </Button>
         </div>
         <div>
+          <EditTaskDialog onEditSuccess={() => refetchTask(task.id)} />
           <DeleteDialog
             type="Task"
             title={task.title}

@@ -12,6 +12,14 @@ export async function getAllGames(): Promise<GameItem[]> {
   return db.select<GameItem[]>("SELECT * FROM `games`");
 }
 
+export async function getTask(id: string): Promise<TaskItem> {
+  const db = await loadDb();
+
+  return db.select<TaskItem>("SELECT * FROM `tasks` WHERE `id` = $1 LIMIT 1", [
+    id,
+  ]);
+}
+
 export async function getTasksByGameId(gameId: string): Promise<TaskItem[]> {
   const db = await loadDb();
 

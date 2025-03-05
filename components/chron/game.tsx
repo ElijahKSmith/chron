@@ -28,6 +28,7 @@ import { Spinner } from "@chron/components/ui/spinner";
 import {
   createTask,
   deleteTask,
+  getTask,
   getTasksByGameId,
   updateTaskDone,
   updateTaskOrder,
@@ -124,6 +125,24 @@ export default function Game({
     [tasks, nextDaily, nextWeekly, sortTasks]
   );
 
+  const refetchTask = useCallback((id: string) => {
+    getTask(id)
+      .then((newTask) =>
+        setTasks((prev) => {
+          const taskIndex = prev.findIndex((task) => task.id === id);
+
+          if (taskIndex > -1) {
+            prev[taskIndex] = newTask;
+          } else {
+            prev.push(newTask);
+          }
+
+          return prev;
+        })
+      )
+      .catch(error);
+  }, []);
+
   useEffect(() => {
     getTasksByGameId(game.id)
       .then((tasks) => setTasks(tasks))
@@ -202,6 +221,7 @@ export default function Game({
                   key={`task-${item.id}`}
                   task={item}
                   setDone={setDone}
+                  refetchTask={refetchTask}
                   deleteTask={removeTask}
                 />
               ))}
