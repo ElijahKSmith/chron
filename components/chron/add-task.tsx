@@ -132,9 +132,15 @@ export function TaskDialog({
                 </FormItem>
               )}
             />
-            <Button type="submit" disabled={!form.formState.isValid}>
-              Create
-            </Button>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Button
+                type="submit"
+                className="col-start-4 col-span-1"
+                disabled={!form.formState.isValid}
+              >
+                Create
+              </Button>
+            </div>
           </form>
         </Form>
       </DialogContent>
