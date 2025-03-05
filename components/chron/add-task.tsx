@@ -5,7 +5,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -15,33 +14,56 @@ import { Label } from "@chron/components/ui/label";
 import { Textarea } from "@chron/components/ui/textarea";
 import { useCallback, useState } from "react";
 import { RadioGroup, RadioGroupItem } from "@chron/components/ui/radio-group";
-import { TaskType } from "@chron/lib/task";
+import { taskSchema, TaskType } from "@chron/lib/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@chron/components/ui/form";
 
 export function TaskDialog({
   gameTitle,
   addTask,
 }: {
   gameTitle: string;
-  addTask: (title: string, type: TaskType, description: string) => void;
+  addTask: (
+    title: string,
+    type: z.infer<typeof TaskType>,
+    description: string
+  ) => void;
 }) {
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [title, setTitle] = useState("");
-  const [type, setType] = useState<TaskType>("daily");
-  const [description, setDescription] = useState("");
 
-  const handleSubmit = useCallback(() => {
-    addTask(title.trim(), type, description.trim());
+  const form = useForm<z.infer<typeof taskSchema>>({
+    resolver: zodResolver(taskSchema),
+    mode: "onChange",
+    defaultValues: {
+      title: "",
+      type: TaskType.enum.daily,
+      description: "",
+    },
+  });
 
-    setDialogOpen(false);
-  }, [addTask, title, type, description]);
+  const handleSubmit = useCallback(
+    (values: z.infer<typeof taskSchema>) => {
+      addTask(values.title, values.type, values.description);
+
+      setDialogOpen(false);
+    },
+    [addTask]
+  );
 
   const handleDialogOpenChange = useCallback(() => {
-    setTitle("");
-    setType("daily");
-    setDescription("");
+    form.reset();
 
     setDialogOpen((prev) => !prev);
-  }, []);
+  }, [form]);
 
   return (
     <Dialog open={dialogOpen} onOpenChange={handleDialogOpenChange}>
@@ -53,58 +75,68 @@ export function TaskDialog({
           <DialogTitle>Add {gameTitle} Task</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="title" className="text-right">
-              Title
-            </Label>
-            <Input
-              id="title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="col-span-3"
-            />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="type" className="text-right">
-              Type
-            </Label>
-            <RadioGroup
-              value={type}
-              onValueChange={(e: TaskType) => setType(e)}
-              className="col-span-3"
-            >
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="daily" id="r1" />
-                <Label htmlFor="r1">Daily</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="weekly" id="r2" />
-                <Label htmlFor="r2">Weekly</Label>
-              </div>
-            </RadioGroup>
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="description" className="text-right">
-              Description
-            </Label>
-            <Textarea
-              id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="col-span-3"
-            />
-          </div>
-        </div>
-        <DialogFooter>
-          <Button
-            type="submit"
-            disabled={title.trim().length < 1}
-            onClick={() => handleSubmit()}
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="grid gap-4 py-4"
           >
-            Save
-          </Button>
-        </DialogFooter>
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem className="grid grid-cols-4 items-center gap-4">
+                  <FormLabel className="text-right">Title</FormLabel>
+                  <FormControl>
+                    <Input className="col-span-3" {...field} />
+                  </FormControl>
+                  <FormMessage className="col-start-2 col-span-3" />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="type"
+              render={({ field }) => (
+                <FormItem className="grid grid-cols-4 items-center gap-4">
+                  <FormLabel className="text-right">Type</FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="col-span-3"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="daily" id="r1" />
+                        <Label htmlFor="r1">Daily</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="weekly" id="r2" />
+                        <Label htmlFor="r2">Weekly</Label>
+                      </div>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem className="grid grid-cols-4 items-center gap-4">
+                  <FormLabel className="text-right">Description</FormLabel>
+                  <FormControl>
+                    <Textarea className="col-span-3" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="submit" disabled={!form.formState.isValid}>
+              Create
+            </Button>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

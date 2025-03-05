@@ -3,6 +3,7 @@ import { z } from "zod";
 export const gameSchema = z.object({
   title: z
     .string({ required_error: "Title is required" })
+    .trim()
     .min(1, "Title is required"),
   dailyHour: z
     .number({ required_error: "Daily hour is required" })
@@ -21,7 +22,10 @@ export const gameSchema = z.object({
 export const TaskType = z.enum(["daily", "weekly"]);
 
 export const taskSchema = z.object({
-  title: z.string({ required_error: "Title is required" }),
+  title: z
+    .string({ required_error: "Title is required" })
+    .trim()
+    .min(1, "Title is required"),
   type: TaskType,
-  description: z.string().optional(),
+  description: z.string().trim(),
 });
