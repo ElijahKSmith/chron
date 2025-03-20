@@ -10,17 +10,17 @@ Tracking for your video game resets
 
 ## What is chron?
 
-chron is a tool to help you track your resets in across video games.
+chron is a tool to help you track your resets across multiple video games.
 
-A reset is the time that activities in a game are either completable or can reward you again. Most games with these types of activities will typically follow a daily and weekly reset system, for example login rewards or raid bosses.
+A reset is the server-side time that activities in a game are either completable or can reward you again. Most games with these types of activities will typically follow a daily and weekly reset system, for example login rewards or raid bosses.
 
 Resets are not standardized across games and may differ heavily depending on a variety of factors such as the server region and content release schedule. The problem is, it can be difficult to track what you've already done before the next reset occurs, especially if you play several games.
 
-Enter chron, a solution to that problem. chron allows you to input your tasks and track their completion status, which will reset at that game's specified reset intervals. Gone are the days of forgetting your dailies!
+Enter chron, the solution to that problem. chron allows you to input your tasks and track their completion status, which will reset at that game's specified reset intervals. Gone are the days of forgetting your dailies!
 
 ## Installation guide
 
-Prior to release 1.0, chron must be built from source.
+You can download a prebuilt installer for chron on the [releases page](https://github.com/ElijahKSmith/chron/releases) or build it from source yourself.
 
 ### Building from source
 
