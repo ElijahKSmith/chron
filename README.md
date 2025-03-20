@@ -10,7 +10,7 @@ Tracking for your video game resets
 
 ## What is chron?
 
-chron is a tool to help you track your resets in across multiple video games.
+chron is a tool to help you track your resets across multiple video games.
 
 A reset is the server-side time that activities in a game are either completable or can reward you again. Most games with these types of activities will typically follow a daily and weekly reset system, for example login rewards or raid bosses.
 
