@@ -16,14 +16,17 @@ import EditTaskDialog from "./edit-task";
 interface TaskProps {
   task: Omit<TaskItem, "order">;
   setDone: (id: string, value: boolean) => void;
-  refetchTask: (id: string) => void;
+  updateAndRefetchTask: (
+    id: string,
+    newTask: Pick<TaskItem, "title" | "description" | "type">
+  ) => void;
   deleteTask: (id: string) => void;
 }
 
 export default function Task({
   task,
   setDone,
-  refetchTask,
+  updateAndRefetchTask,
   deleteTask,
 }: TaskProps) {
   return (
@@ -57,7 +60,10 @@ export default function Task({
           </Button>
         </div>
         <div>
-          <EditTaskDialog onEditSuccess={() => refetchTask(task.id)} />
+          <EditTaskDialog
+            originalTask={task}
+            onEditSuccess={updateAndRefetchTask}
+          />
           <DeleteDialog
             type="Task"
             title={task.title}

@@ -74,6 +74,18 @@ export async function createTask(
   );
 }
 
+export async function updateTaskInfo(
+  taskId: string,
+  newTask: Pick<TaskItem, "title" | "description" | "type">
+): Promise<void> {
+  const db = await loadDb();
+
+  await db.execute(
+    "UPDATE `tasks` SET `title` = $2, `description` = $3, `type` = $4 WHERE `id` = $1",
+    [taskId, newTask.title, newTask.description, newTask.type]
+  );
+}
+
 export async function deleteTask(taskId: string): Promise<void> {
   const db = await loadDb();
 

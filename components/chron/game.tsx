@@ -31,6 +31,7 @@ import {
   getTask,
   getTasksByGameId,
   updateTaskDone,
+  updateTaskInfo,
   updateTaskOrder,
 } from "@chron/lib/database";
 import { error } from "@tauri-apps/plugin-log";
@@ -125,23 +126,28 @@ export default function Game({
     [tasks, nextDaily, nextWeekly, sortTasks]
   );
 
-  const refetchTask = useCallback((id: string) => {
-    getTask(id)
-      .then((newTask) =>
-        setTasks((prev) => {
-          const taskIndex = prev.findIndex((task) => task.id === id);
+  const updateAndRefetchTask = useCallback(
+    (id: string, newTask: Pick<TaskItem, "title" | "description" | "type">) => {
+      updateTaskInfo(id, newTask)
+        .then(() =>
+          getTask(id).then((newTask) =>
+            setTasks((prev) => {
+              const taskIndex = prev.findIndex((task) => task.id === id);
 
-          if (taskIndex > -1) {
-            prev[taskIndex] = newTask;
-          } else {
-            prev.push(newTask);
-          }
+              if (taskIndex > -1) {
+                prev[taskIndex] = newTask;
+              } else {
+                prev.push(newTask);
+              }
 
-          return prev;
-        })
-      )
-      .catch(error);
-  }, []);
+              return prev;
+            })
+          )
+        )
+        .catch(error);
+    },
+    []
+  );
 
   useEffect(() => {
     getTasksByGameId(game.id)
@@ -221,7 +227,7 @@ export default function Game({
                   key={`task-${item.id}`}
                   task={item}
                   setDone={setDone}
-                  refetchTask={refetchTask}
+                  updateAndRefetchTask={updateAndRefetchTask}
                   deleteTask={removeTask}
                 />
               ))}
