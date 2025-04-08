@@ -25,7 +25,7 @@ If applicable, add screenshots to help explain your problem.
 
 **Desktop (please complete the following information):**
  - OS and version: [e.g. Windows 10 Home 22H2]
- - chron Version [e.g. 0.0.2]
+ - chron Version: [e.g. 0.0.2]
 
 **Additional context**
 Add any other context about the problem here.
