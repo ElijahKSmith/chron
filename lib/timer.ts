@@ -9,6 +9,22 @@ export function formatDailyTime(hours: number, minutes: number): string {
   );
 }
 
+function getTodayTimes(dailyTime: string): { now: Date; todayWithTime: Date } {
+  const now = new Date();
+  const todayDate = `${now.getFullYear()}-${(now.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}-${now.getDate().toString().padStart(2, "0")}`;
+
+  const parsedTime = parseISO(`${todayDate}T${dailyTime}`);
+  const hours = parsedTime.getHours();
+  const minutes = parsedTime.getMinutes();
+  const seconds = parsedTime.getSeconds();
+
+  const todayWithTime = set(now, { hours, minutes, seconds, milliseconds: 0 });
+
+  return { now, todayWithTime };
+}
+
 /**
  * Determines if the given reset time has happened on the current UTC date
  *
@@ -17,13 +33,7 @@ export function formatDailyTime(hours: number, minutes: number): string {
  * @note See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#date_time_string_format
  */
 export function hasResetHappenedToday(dailyTime: string): boolean {
-  const parsedTime = parseISO(`1970-01-01T${dailyTime}`);
-  const hours = parsedTime.getHours();
-  const minutes = parsedTime.getMinutes();
-  const seconds = parsedTime.getSeconds();
-
-  const now = new Date();
-  const todayWithTime = set(now, { hours, minutes, seconds, milliseconds: 0 });
+  const { now, todayWithTime } = getTodayTimes(dailyTime);
 
   return isAfter(now, todayWithTime);
 }
@@ -40,16 +50,9 @@ export function hasResetHappenedThisWeek(
   dailyTime: string,
   weeklyDay: number
 ): boolean {
-  const parsedTime = parseISO(`1970-01-01T${dailyTime}`);
-  const hours = parsedTime.getHours();
-  const minutes = parsedTime.getMinutes();
-  const seconds = parsedTime.getSeconds();
+  const { now, todayWithTime } = getTodayTimes(dailyTime);
 
-  const now = new Date();
-  const dayWithTime = setDay(
-    set(now, { hours, minutes, seconds, milliseconds: 0 }),
-    weeklyDay
-  );
+  const dayWithTime = setDay(todayWithTime, weeklyDay);
 
   return isAfter(now, dayWithTime);
 }
@@ -62,19 +65,14 @@ export function hasResetHappenedThisWeek(
  * @note See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#date_time_string_format
  */
 export function getNextDailyReset(dailyTime: string): Date {
-  const parsedTime = parseISO(`1970-01-01T${dailyTime}`);
-  const hours = parsedTime.getHours();
-  const minutes = parsedTime.getMinutes();
-  const seconds = parsedTime.getSeconds();
+  const { now, todayWithTime } = getTodayTimes(dailyTime);
 
-  let nextReset = set(new Date(), { hours, minutes, seconds, milliseconds: 0 });
-
-  const isResetTomorrow = hasResetHappenedToday(dailyTime);
+  const isResetTomorrow = isAfter(now, todayWithTime);
   if (isResetTomorrow) {
-    nextReset = addDays(nextReset, 1);
+    return addDays(todayWithTime, 1);
   }
 
-  return nextReset;
+  return todayWithTime;
 }
 
 /**
@@ -86,19 +84,11 @@ export function getNextDailyReset(dailyTime: string): Date {
  * @note See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#date_time_string_format
  */
 export function getNextWeeklyReset(dailyTime: string, weeklyDay: number): Date {
-  const parsedTime = parseISO(`1970-01-01T${dailyTime}`);
+  const { now, todayWithTime } = getTodayTimes(dailyTime);
 
-  const hours = parsedTime.getHours();
-  const minutes = parsedTime.getMinutes();
-  const seconds = parsedTime.getSeconds();
+  let nextReset = setDay(todayWithTime, weeklyDay);
 
-  const now = new Date();
-  let nextReset = setDay(
-    set(now, { hours, minutes, seconds, milliseconds: 0 }),
-    weeklyDay
-  );
-
-  const isResetNextWeek = hasResetHappenedThisWeek(dailyTime, weeklyDay);
+  const isResetNextWeek = isAfter(now, nextReset);
   if (isResetNextWeek) {
     nextReset = addWeeks(nextReset, 1);
   }

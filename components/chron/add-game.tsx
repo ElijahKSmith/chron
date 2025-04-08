@@ -45,6 +45,11 @@ export function GameDialog({
 }) {
   const [dialogOpen, setDialogOpen] = useState(false);
 
+  const now = new Date();
+  const todayDate = `${now.getFullYear()}-${(now.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}-${now.getDate().toString().padStart(2, "0")}`;
+
   const form = useForm<z.infer<typeof gameSchema>>({
     resolver: zodResolver(gameSchema),
     mode: "onChange",
@@ -176,7 +181,7 @@ export function GameDialog({
               <div className="col-start-2 col-span-4">
                 {format(
                   parseISO(
-                    `1970-01-01T${formatDailyTime(dailyHour, dailyMinute)}`
+                    `${todayDate}T${formatDailyTime(dailyHour, dailyMinute)}`
                   ),
                   "h:mm a"
                 )}{" "}
