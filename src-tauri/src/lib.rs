@@ -28,7 +28,15 @@ pub fn run() {
                   CONSTRAINT tasks_games_FK FOREIGN KEY (gameId) REFERENCES games(id) ON DELETE CASCADE
               );",
         kind: MigrationKind::Up,
-    }];
+    },
+    Migration {
+        version: 2,
+        description: "Add closed state to games and tasks",
+        sql: "ALTER TABLE games ADD closed INTEGER DEFAULT (0) NOT NULL;
+              ALTER TABLE tasks ADD closed INTEGER DEFAULT (0) NOT NULL;",
+        kind: MigrationKind::Up
+    }
+    ];
 
     tauri::Builder::default()
         .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
