@@ -2,19 +2,31 @@ import { z } from "zod";
 
 export const gameSchema = z.object({
   title: z
-    .string({ required_error: "Title is required" })
+    .string({
+      error: (issue) =>
+        issue.input === undefined ? "Title is required" : "Not a string",
+    })
     .trim()
     .min(1, "Title is required"),
   dailyHour: z
-    .number({ required_error: "Daily hour is required" })
+    .number({
+      error: (issue) =>
+        issue.input === undefined ? "Daily hour is required" : "Not a number",
+    })
     .min(0)
     .max(23),
   dailyMinute: z
-    .number({ required_error: "Daily minute is required" })
+    .number({
+      error: (issue) =>
+        issue.input === undefined ? "Daily minute is required" : "Not a number",
+    })
     .min(0)
     .max(59),
   weeklyDay: z
-    .number({ required_error: "Weekly day is required" })
+    .number({
+      error: (issue) =>
+        issue.input === undefined ? "Weekly day is required" : "Not a number",
+    })
     .min(0)
     .max(6),
 });
@@ -23,7 +35,10 @@ export const TaskType = z.enum(["daily", "weekly"]);
 
 export const taskSchema = z.object({
   title: z
-    .string({ required_error: "Title is required" })
+    .string({
+      error: (issue) =>
+        issue.input === undefined ? "Title is required" : "Not a string",
+    })
     .trim()
     .min(1, "Title is required"),
   type: TaskType,
