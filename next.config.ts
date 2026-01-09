@@ -11,7 +11,7 @@ const nextConfig: NextConfig = {
   },
   assetPrefix: isProd ? undefined : `http://${internalHost}:3000`,
   devIndicators: {
-    appIsrStatus: false,
+    position: "bottom-left",
   },
 };
 
