@@ -17,9 +17,19 @@ import {
 } from "@chron/components/ui/accordion";
 import { Switch } from "@chron/components/ui/switch";
 import { Label } from "@chron/components/ui/label";
+import { useSettings } from "@chron/components/chron/settings-context";
+import { useCallback } from "react";
 
 export default function Settings() {
   const { setTheme } = useTheme();
+  const { gameSettings, setGameSettings } = useSettings();
+
+  const openTasksOnResetChange = useCallback(
+    (value: boolean) => {
+      setGameSettings((prev) => ({ ...prev, openTasksOnReset: value }));
+    },
+    [setGameSettings]
+  );
 
   return (
     <div className="flex flex-col gap-2 px-7">
@@ -57,7 +67,11 @@ export default function Settings() {
         <AccordionItem value="game-settings">
           <AccordionTrigger>Game Settings</AccordionTrigger>
           <AccordionContent className="flex flex-row items-center gap-4">
-            <Switch id="game-reset-collapse" />
+            <Switch
+              id="game-reset-collapse"
+              checked={gameSettings.openTasksOnReset}
+              onCheckedChange={openTasksOnResetChange}
+            />
             <Label htmlFor="game-reset-collapse">Open Tasks On Reset</Label>
           </AccordionContent>
         </AccordionItem>
