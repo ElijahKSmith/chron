@@ -31,9 +31,8 @@ pub fn run() {
     },
     Migration {
         version: 2,
-        description: "Add open state to games and tasks",
-        sql: "ALTER TABLE games ADD open INTEGER DEFAULT (1) NOT NULL;
-              ALTER TABLE tasks ADD open INTEGER DEFAULT (1) NOT NULL;",
+        description: "Add open state to games",
+        sql: "ALTER TABLE games ADD open INTEGER DEFAULT (1) NOT NULL;",
         kind: MigrationKind::Up
     }
     ];

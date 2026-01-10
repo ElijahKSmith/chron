@@ -74,16 +74,8 @@ export async function createTask(
   const db = await loadDb();
 
   await db.execute(
-    "INSERT INTO `tasks` (`id`, `gameId`, `title`, `type`, `description`, `order`, `open`) VALUES ($1, $2, $3, $4, $5, $6, $7)",
-    [
-      task.id,
-      gameId,
-      task.title,
-      task.type,
-      task.description,
-      task.order,
-      task.open,
-    ]
+    "INSERT INTO `tasks` (`id`, `gameId`, `title`, `type`, `description`, `order`) VALUES ($1, $2, $3, $4, $5, $6)",
+    [task.id, gameId, task.title, task.type, task.description, task.order]
   );
 }
 
@@ -116,16 +108,4 @@ export async function updateTaskDone(
     "UPDATE `tasks` SET `done` = $1, `nextReset` = $2 WHERE `id` = $3",
     [done ? 1 : 0, nextReset?.getTime(), taskId]
   );
-}
-
-export async function updateTaskOpenState(
-  taskId: string,
-  open: boolean
-): Promise<void> {
-  const db = await loadDb();
-
-  await db.execute("UPDATE `tasks` SET `open` = $1 WHERE `id` = $2", [
-    open ? 1 : 0,
-    taskId,
-  ]);
 }
