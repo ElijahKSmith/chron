@@ -24,7 +24,7 @@ export async function createGame(game: GameItem): Promise<void> {
   const db = await loadDb();
 
   await db.execute(
-    "INSERT INTO `games` (`id`, `title`, `dailyHour`, `dailyMinute`, `weeklyDay`, `order`) VALUES ($1, $2, $3, $4, $5, $6)",
+    "INSERT INTO `games` (`id`, `title`, `dailyHour`, `dailyMinute`, `weeklyDay`, `order`, `closed`) VALUES ($1, $2, $3, $4, $5, $6, $7)",
     [
       game.id,
       game.title,
@@ -32,6 +32,7 @@ export async function createGame(game: GameItem): Promise<void> {
       game.dailyMinute,
       game.weeklyDay,
       game.order,
+      game.closed,
     ]
   );
 }
@@ -61,8 +62,16 @@ export async function createTask(
   const db = await loadDb();
 
   await db.execute(
-    "INSERT INTO `tasks` (`id`, `gameId`, `title`, `type`, `description`, `order`) VALUES ($1, $2, $3, $4, $5, $6)",
-    [task.id, gameId, task.title, task.type, task.description, task.order]
+    "INSERT INTO `tasks` (`id`, `gameId`, `title`, `type`, `description`, `order`, `closed`) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+    [
+      task.id,
+      gameId,
+      task.title,
+      task.type,
+      task.description,
+      task.order,
+      task.closed,
+    ]
   );
 }
 

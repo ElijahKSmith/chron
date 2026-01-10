@@ -5,4 +5,5 @@ export interface GameItem {
   dailyHour: number;
   dailyMinute: number;
   weeklyDay: number;
+  closed: boolean;
 }

@@ -6,6 +6,7 @@ export interface TaskItem {
   description: string;
   done: boolean;
   nextReset: Date | null;
+  closed: boolean;
 }
 
 export type TaskType = "daily" | "weekly";

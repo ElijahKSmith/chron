@@ -73,6 +73,7 @@ export default function Game({
         description,
         done: false,
         nextReset: null,
+        closed: false,
       };
 
       setTasks((prev) => prev.concat([newItem]));

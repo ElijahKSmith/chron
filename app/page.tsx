@@ -36,6 +36,7 @@ export default function Dashboard() {
         dailyHour,
         dailyMinute,
         weeklyDay,
+        closed: false,
       };
 
       setGames((prev) => prev.concat([newItem]));
