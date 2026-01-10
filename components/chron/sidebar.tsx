@@ -13,7 +13,7 @@ import { LayoutDashboard, Settings } from "lucide-react";
 export default function ChronSidebar() {
   const items = [
     {
-      title: "Dashboard",
+      title: "Home",
       icon: LayoutDashboard,
       url: "/",
     },

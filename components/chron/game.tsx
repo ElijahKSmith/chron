@@ -29,10 +29,12 @@ import {
   createTask,
   deleteTask,
   getTasksByGameId,
+  updateGameOpenState,
   updateTaskDone,
   updateTaskOrder,
 } from "@chron/lib/database";
 import { error } from "@tauri-apps/plugin-log";
+import { useSettings } from "@chron/components/chron/settings-context";
 
 export default function Game({
   game,
@@ -42,12 +44,13 @@ export default function Game({
   deleteGame: (id: string) => void;
 }) {
   const [loading, setLoading] = useState(true);
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(game.open);
   const [nextDaily, setNextDaily] = useState<Date | null>(null);
   const [nextWeekly, setNextWeekly] = useState<Date | null>(null);
   const [tasks, setTasks] = useState<TaskItem[]>([]);
 
   const { currentTimestamp } = useTimer();
+  const { gameSettings } = useSettings();
 
   const reorderTasks = useCallback((a: TaskItem[]) => {
     return a.map<TaskItem>((item, i) => ({ ...item, order: i }));
@@ -124,6 +127,14 @@ export default function Game({
     [tasks, nextDaily, nextWeekly, sortTasks]
   );
 
+  const openGame = useCallback(
+    (open: boolean) => {
+      setOpen(open);
+      updateGameOpenState(game.id, open).catch(error);
+    },
+    [game]
+  );
+
   useEffect(() => {
     getTasksByGameId(game.id)
       .then((tasks) => setTasks(tasks))
@@ -156,6 +167,10 @@ export default function Game({
           .sort(sortTasks)
       );
 
+      if (gameSettings.openTasksOnReset) {
+        openGame(true);
+      }
+
       Promise.all(
         updatedTasks.map(async (task) =>
           updateTaskDone(task.id, task.done, task.nextReset)
@@ -175,7 +190,7 @@ export default function Game({
         />
       </CardHeader>
       <CardContent>
-        <Collapsible open={open} onOpenChange={setOpen}>
+        <Collapsible open={open} onOpenChange={openGame}>
           <div className="flex flex-row place-items-center place-content-between">
             <div className="flex flex-row place-items-center">
               <CollapsibleTrigger asChild>

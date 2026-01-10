@@ -9,15 +9,22 @@ async function loadDb(): Promise<Database> {
 export async function getAllGames(): Promise<GameItem[]> {
   const db = await loadDb();
 
-  return db.select<GameItem[]>("SELECT * FROM `games`");
+  const games = await db.select<GameItem[]>("SELECT * FROM `games`");
+
+  // game.open is expected to be a boolean, but stored in db as int
+  return games.map((game) => ({ ...game, open: !!game.open }));
 }
 
 export async function getTasksByGameId(gameId: string): Promise<TaskItem[]> {
   const db = await loadDb();
 
-  return db.select<TaskItem[]>("SELECT * FROM `tasks` WHERE `gameId` = $1", [
-    gameId,
-  ]);
+  const tasks = await db.select<TaskItem[]>(
+    "SELECT * FROM `tasks` WHERE `gameId` = $1",
+    [gameId]
+  );
+
+  // task.done is expected to be a boolean, but stored in db as int
+  return tasks.map((task) => ({ ...task, done: !!task.done }));
 }
 
 export async function createGame(game: GameItem): Promise<void> {
@@ -50,6 +57,18 @@ export async function updateGameOrder(
 
   await db.execute("UPDATE `games` SET `order` = $1 WHERE `id` = $2", [
     order,
+    gameId,
+  ]);
+}
+
+export async function updateGameOpenState(
+  gameId: string,
+  open: boolean
+): Promise<void> {
+  const db = await loadDb();
+
+  await db.execute("UPDATE `games` SET `open` = $1 WHERE `id` = $2", [
+    open ? 1 : 0,
     gameId,
   ]);
 }
