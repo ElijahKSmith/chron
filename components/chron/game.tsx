@@ -29,6 +29,7 @@ import {
   createTask,
   deleteTask,
   getTasksByGameId,
+  updateGameOpenState,
   updateTaskDone,
   updateTaskOrder,
 } from "@chron/lib/database";
@@ -73,7 +74,7 @@ export default function Game({
         description,
         done: false,
         nextReset: null,
-        closed: false,
+        open: true,
       };
 
       setTasks((prev) => prev.concat([newItem]));
@@ -124,6 +125,11 @@ export default function Game({
     },
     [tasks, nextDaily, nextWeekly, sortTasks]
   );
+
+  const openGame = useCallback((open: boolean) => {
+    setOpen(open);
+    updateGameOpenState(game.id, open).catch(error);
+  }, []);
 
   useEffect(() => {
     getTasksByGameId(game.id)
@@ -176,7 +182,7 @@ export default function Game({
         />
       </CardHeader>
       <CardContent>
-        <Collapsible open={open} onOpenChange={setOpen}>
+        <Collapsible open={open} onOpenChange={openGame}>
           <div className="flex flex-row place-items-center place-content-between">
             <div className="flex flex-row place-items-center">
               <CollapsibleTrigger asChild>

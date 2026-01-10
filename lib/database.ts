@@ -24,7 +24,7 @@ export async function createGame(game: GameItem): Promise<void> {
   const db = await loadDb();
 
   await db.execute(
-    "INSERT INTO `games` (`id`, `title`, `dailyHour`, `dailyMinute`, `weeklyDay`, `order`, `closed`) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+    "INSERT INTO `games` (`id`, `title`, `dailyHour`, `dailyMinute`, `weeklyDay`, `order`, `open`) VALUES ($1, $2, $3, $4, $5, $6, $7)",
     [
       game.id,
       game.title,
@@ -32,7 +32,7 @@ export async function createGame(game: GameItem): Promise<void> {
       game.dailyMinute,
       game.weeklyDay,
       game.order,
-      game.closed,
+      game.open,
     ]
   );
 }
@@ -55,14 +55,14 @@ export async function updateGameOrder(
   ]);
 }
 
-export async function updateGameClosedState(
+export async function updateGameOpenState(
   gameId: string,
-  closed: boolean
+  open: boolean
 ): Promise<void> {
   const db = await loadDb();
 
-  await db.execute("UPDATE `games` SET `closed` = $1 WHERE `id` = $2", [
-    closed ? 1 : 0,
+  await db.execute("UPDATE `games` SET `open` = $1 WHERE `id` = $2", [
+    open ? 1 : 0,
     gameId,
   ]);
 }
@@ -74,7 +74,7 @@ export async function createTask(
   const db = await loadDb();
 
   await db.execute(
-    "INSERT INTO `tasks` (`id`, `gameId`, `title`, `type`, `description`, `order`, `closed`) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+    "INSERT INTO `tasks` (`id`, `gameId`, `title`, `type`, `description`, `order`, `open`) VALUES ($1, $2, $3, $4, $5, $6, $7)",
     [
       task.id,
       gameId,
@@ -82,7 +82,7 @@ export async function createTask(
       task.type,
       task.description,
       task.order,
-      task.closed,
+      task.open,
     ]
   );
 }
@@ -118,14 +118,14 @@ export async function updateTaskDone(
   );
 }
 
-export async function updateTaskClosedState(
+export async function updateTaskOpenState(
   taskId: string,
-  closed: boolean
+  open: boolean
 ): Promise<void> {
   const db = await loadDb();
 
-  await db.execute("UPDATE `tasks` SET `closed` = $1 WHERE `id` = $2", [
-    closed ? 1 : 0,
+  await db.execute("UPDATE `tasks` SET `open` = $1 WHERE `id` = $2", [
+    open ? 1 : 0,
     taskId,
   ]);
 }
