@@ -55,6 +55,18 @@ export async function updateGameOrder(
   ]);
 }
 
+export async function updateGameClosedState(
+  gameId: string,
+  closed: boolean
+): Promise<void> {
+  const db = await loadDb();
+
+  await db.execute("UPDATE `games` SET `closed` = $1 WHERE `id` = $2", [
+    closed ? 1 : 0,
+    gameId,
+  ]);
+}
+
 export async function createTask(
   task: Omit<TaskItem, "done" | "nextReset">,
   gameId: string
@@ -104,4 +116,16 @@ export async function updateTaskDone(
     "UPDATE `tasks` SET `done` = $1, `nextReset` = $2 WHERE `id` = $3",
     [done ? 1 : 0, nextReset?.getTime(), taskId]
   );
+}
+
+export async function updateTaskClosedState(
+  taskId: string,
+  closed: boolean
+): Promise<void> {
+  const db = await loadDb();
+
+  await db.execute("UPDATE `tasks` SET `closed` = $1 WHERE `id` = $2", [
+    closed ? 1 : 0,
+    taskId,
+  ]);
 }
