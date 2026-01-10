@@ -43,7 +43,7 @@ export default function Game({
   deleteGame: (id: string) => void;
 }) {
   const [loading, setLoading] = useState(true);
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(game.open);
   const [nextDaily, setNextDaily] = useState<Date | null>(null);
   const [nextWeekly, setNextWeekly] = useState<Date | null>(null);
   const [tasks, setTasks] = useState<TaskItem[]>([]);
