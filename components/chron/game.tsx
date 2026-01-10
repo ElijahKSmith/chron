@@ -34,6 +34,7 @@ import {
   updateTaskOrder,
 } from "@chron/lib/database";
 import { error } from "@tauri-apps/plugin-log";
+import { useSettings } from "@chron/components/chron/settings-context";
 
 export default function Game({
   game,
@@ -49,6 +50,7 @@ export default function Game({
   const [tasks, setTasks] = useState<TaskItem[]>([]);
 
   const { currentTimestamp } = useTimer();
+  const { gameSettings } = useSettings();
 
   const reorderTasks = useCallback((a: TaskItem[]) => {
     return a.map<TaskItem>((item, i) => ({ ...item, order: i }));
@@ -164,6 +166,10 @@ export default function Game({
           .concat(updatedTasks)
           .sort(sortTasks)
       );
+
+      if (gameSettings.openTasksOnReset) {
+        openGame(true);
+      }
 
       Promise.all(
         updatedTasks.map(async (task) =>
