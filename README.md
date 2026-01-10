@@ -25,7 +25,7 @@ You can download a prebuilt installer for chron on the [releases page](https://g
 ### Building from source
 
 1. Install the prerequisites:
-   1. [NodeJS 20](https://nodejs.org/en/download/)
+   1. [NodeJS 24](https://nodejs.org/en/download/)
    2. [Tauri 2.0](https://tauri.app/start/prerequisites/)
 2. Clone the repository. Change directory into the repository root.
 3. Install the dependencies:
