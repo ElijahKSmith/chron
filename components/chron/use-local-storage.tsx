@@ -3,9 +3,13 @@
 import { useState, useEffect, Dispatch, SetStateAction } from "react";
 
 function getStorageValue<T>(key: string, defaultValue: T): T {
-  const item = localStorage.getItem(key);
-  const value = item !== null ? JSON.parse(item) : defaultValue;
-  return value;
+  if (typeof window !== "undefined") {
+    const item = localStorage.getItem(key);
+    const value = item !== null ? JSON.parse(item) : defaultValue;
+    return value;
+  }
+
+  return defaultValue;
 }
 
 export const useLocalStorage = <T,>(
