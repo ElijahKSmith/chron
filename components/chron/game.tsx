@@ -74,7 +74,6 @@ export default function Game({
         description,
         done: false,
         nextReset: null,
-        open: true,
       };
 
       setTasks((prev) => prev.concat([newItem]));
@@ -126,10 +125,13 @@ export default function Game({
     [tasks, nextDaily, nextWeekly, sortTasks]
   );
 
-  const openGame = useCallback((open: boolean) => {
-    setOpen(open);
-    updateGameOpenState(game.id, open).catch(error);
-  }, []);
+  const openGame = useCallback(
+    (open: boolean) => {
+      setOpen(open);
+      updateGameOpenState(game.id, open).catch(error);
+    },
+    [game]
+  );
 
   useEffect(() => {
     getTasksByGameId(game.id)
