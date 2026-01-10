@@ -31,7 +31,7 @@ export async function createGame(game: GameItem): Promise<void> {
   const db = await loadDb();
 
   await db.execute(
-    "INSERT INTO `games` (`id`, `title`, `dailyHour`, `dailyMinute`, `weeklyDay`, `order`, `open`) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+    "INSERT INTO `games` (`id`, `title`, `dailyHour`, `dailyMinute`, `weeklyDay`, `order`) VALUES ($1, $2, $3, $4, $5, $6)",
     [
       game.id,
       game.title,
@@ -39,7 +39,6 @@ export async function createGame(game: GameItem): Promise<void> {
       game.dailyMinute,
       game.weeklyDay,
       game.order,
-      game.open,
     ]
   );
 }
