@@ -147,9 +147,25 @@ Updating, improving and correcting the documentation
 
 ## Styleguides
 ### Commit Messages
-<!-- TODO
 
--->
+Every commit that lands on `main` must follow the [Conventional Commits](https://www.conventionalcommits.org/) spec. Because pull requests are squash-merged and GitHub is configured to use the PR title as the squash commit message, **the rule applies to your PR title** — individual commits on your working branch can be named however you like; they get thrown away by the squash.
+
+The PR title must match:
+
+```
+<type>(<optional scope>): <subject>
+```
+
+Allowed types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`. The subject should be lowercase and in the imperative mood.
+
+Examples pulled from recent history:
+
+- `feat: persistent collapsible task lists`
+- `chore(deps): bump rsa from 0.9.7 to 0.9.10`
+- `chore: bump version to 0.0.4`
+
+The `Conventional Commit Title` GitHub Actions check runs on every PR and will fail if the title doesn't match. Editing the PR title re-triggers the check, so you can fix it in place without pushing anything.
+
 
 ## Join The Project Team
 <!-- TODO -->
