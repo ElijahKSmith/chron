@@ -1,12 +1,5 @@
 name: "Conventional Commit Title"
 
-# Every PR is squash-merged into `main`, and GitHub's repo setting
-# "Default commit message for squash merging" is set to "Pull request title",
-# so the PR title becomes the commit subject on `main` verbatim.
-# Validating the PR title here is what enforces Conventional Commits on `main`.
-#
-# See CONTRIBUTING.md ("Commit Messages") for the policy this check implements.
-
 on:
   pull_request:
     types:
@@ -15,11 +8,6 @@ on:
       - reopened
       - synchronize
 
-# `pull_request` (not `pull_request_target`) runs the workflow in a sandboxed
-# fork context with a read-only GITHUB_TOKEN and no access to repository
-# secrets, which is all this check needs. This shrinks the blast radius if a
-# future edit ever adds an `actions/checkout` step of the PR head, which
-# would be a credential-exfiltration footgun under `pull_request_target`.
 permissions:
   contents: read
   pull-requests: read
@@ -29,12 +17,6 @@ jobs:
     name: Validate PR title
     runs-on: ubuntu-latest
     steps:
-      # Third-party action pinned to a full commit SHA rather than a moving
-      # tag (`@v6`) to defend against the tj-actions class of supply-chain
-      # attack, where a compromised maintainer account can force-push the tag
-      # to point at malicious code. Bump the pin (and the trailing comment)
-      # when upgrading; Dependabot's `github-actions` ecosystem can do this
-      # automatically.
       - uses: amannn/action-semantic-pull-request@48f256284bd46cdaab1048c3721360e808335d50 # v6.1.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -52,8 +34,6 @@ jobs:
             chore
             revert
           requireScope: false
-          # Disallow subjects that start with an uppercase letter, per the
-          # Conventional Commits convention (lowercase, imperative mood).
           subjectPattern: ^(?![A-Z]).+$
           subjectPatternError: |
             The subject "{subject}" found in the pull request title "{title}"
