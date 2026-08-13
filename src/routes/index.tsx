@@ -1,5 +1,4 @@
-"use client";
-
+import { createFileRoute } from "@tanstack/react-router";
 import Game from "@chron/components/chron/game";
 import { useCallback, useEffect, useState } from "react";
 import { GameItem } from "@chron/lib/game";
@@ -14,7 +13,7 @@ import {
 } from "@chron/lib/database";
 import { error } from "@tauri-apps/plugin-log";
 
-export default function Dashboard() {
+function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [games, setGames] = useState<GameItem[]>([]);
 
@@ -85,3 +84,7 @@ export default function Dashboard() {
     </>
   );
 }
+
+export const Route = createFileRoute("/")({
+  component: Dashboard,
+});

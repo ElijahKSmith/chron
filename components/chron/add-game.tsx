@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@chron/components/ui/button";
 import {
   Dialog,

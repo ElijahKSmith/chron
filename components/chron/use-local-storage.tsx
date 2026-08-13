@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useEffect, Dispatch, SetStateAction } from "react";
 
 function getStorageValue<T>(key: string, defaultValue: T): T {
