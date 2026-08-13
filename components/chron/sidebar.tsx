@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Sidebar,
   SidebarContent,
@@ -8,6 +6,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@chron/components/ui/sidebar";
+import { Link } from "@tanstack/react-router";
 import { LayoutDashboard, Settings } from "lucide-react";
 
 export default function ChronSidebar() {
@@ -20,9 +19,9 @@ export default function ChronSidebar() {
     {
       title: "Settings",
       icon: Settings,
-      url: "settings",
+      url: "/settings",
     },
-  ];
+  ] as const;
 
   return (
     <Sidebar>
@@ -31,10 +30,10 @@ export default function ChronSidebar() {
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton asChild>
-                <a href={item.url}>
+                <Link to={item.url}>
                   <item.icon />
                   <span>{item.title}</span>
-                </a>
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}

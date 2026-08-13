@@ -9,11 +9,8 @@
 # testing
 /coverage
 
-# next.js
-/.next/
-/out/
-
-# production
+# build output
+/dist
 /build
 
 # misc
@@ -28,9 +25,8 @@ yarn-error.log*
 # local env files
 .env*.local
 
-# vercel
-.vercel
-
 # typescript
 *.tsbuildinfo
-next-env.d.ts
+
+# tanstack router (generated)
+/src/routeTree.gen.ts

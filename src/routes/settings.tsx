@@ -1,5 +1,4 @@
-"use client";
-
+import { createFileRoute } from "@tanstack/react-router";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,7 +19,7 @@ import { Label } from "@chron/components/ui/label";
 import { useSettings } from "@chron/components/chron/settings-context";
 import { useCallback, useEffect, useState } from "react";
 
-export default function Settings() {
+function Settings() {
   const [isClient, setIsClient] = useState(false);
 
   const { setTheme } = useTheme();
@@ -87,3 +86,7 @@ export default function Settings() {
     </div>
   );
 }
+
+export const Route = createFileRoute("/settings")({
+  component: Settings,
+});
