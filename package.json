@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build",
+    "build": "tsr generate && tsc --noEmit && vite build",
     "preview": "vite preview",
     "lint": "eslint .",
     "tauri": "tauri",
@@ -48,6 +48,7 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@tailwindcss/postcss": "^4.1.18",
+    "@tanstack/router-cli": "^1.167.28",
     "@tanstack/router-plugin": "^1.168.0",
     "@tauri-apps/cli": "^2.9.6",
     "@types/node": "^24",
