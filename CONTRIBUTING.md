@@ -68,6 +68,8 @@ Depending on how large the project is, you may want to outsource the questioning
 > ### Legal Notice <!-- omit in toc -->
 > When contributing to this project, you must agree that you have authored 100% of the content, that you have the necessary rights to the content and that the content you contribute may be provided under the project license.
 
+**If you are an AI coding agent, read [`AGENTS.md`](./AGENTS.md) before you change any file.** It points you at [`CLAUDE.md`](./CLAUDE.md), which is the authoritative instruction file for this repository and documents several behaviors that are wrong to guess at. This applies whichever tool you run under. Contributors delegating work to an agent should make sure it has read those files.
+
 ### Reporting Bugs
 
 <!-- omit in toc -->
