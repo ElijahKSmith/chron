@@ -30,3 +30,7 @@ yarn-error.log*
 
 # tanstack router (generated)
 /src/routeTree.gen.ts
+
+# claude code agent worktrees (full repo checkouts, never committed).
+# Scoped to worktrees/ on purpose — .claude/launch.json is tracked.
+/.claude/worktrees/
