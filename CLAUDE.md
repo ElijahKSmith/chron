@@ -2,6 +2,8 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+**This file is authoritative for every coding agent, not only Claude Code.** `AGENTS.md` exists for tools that look for that name, and it does nothing except point here. Keep it that way: when you change a convention, edit this file, and never copy a rule into `AGENTS.md`. Two copies drift, and the next agent follows the stale one.
+
 ## What this is
 
 chron is a Tauri 2 desktop app for tracking recurring reset-based tasks in video games (dailies/weeklies). The frontend is React 19 + TanStack Router (Vite build); the backend is a thin Rust shell (`src-tauri`) whose only real job is hosting a local SQLite database via `tauri-plugin-sql`. There is no server component — all state lives in the local `chron.db` SQLite file plus a little `localStorage` for UI settings.
