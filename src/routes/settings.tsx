@@ -6,6 +6,7 @@ import {
   DropdownMenuTrigger,
 } from "@chron/components/ui/dropdown-menu";
 import { Button } from "@chron/components/ui/button";
+import { SidebarTrigger } from "@chron/components/ui/sidebar";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import {
@@ -37,7 +38,8 @@ function Settings() {
   }, []);
 
   return (
-    <div className="flex flex-col gap-2 px-7">
+    <div className="flex flex-col gap-4">
+      <SidebarTrigger className="text-muted-foreground hover:text-foreground bg-foreground/5 hover:bg-foreground/10 size-[30px] rounded-[9px]" />
       {isClient && (
         <Accordion
           type="multiple"

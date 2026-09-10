@@ -8,6 +8,7 @@ import {
   DialogTrigger,
 } from "@chron/components/ui/dialog";
 import { Input } from "@chron/components/ui/input";
+import { Plus } from "lucide-react";
 import { useCallback, useState } from "react";
 import {
   Select,
@@ -87,7 +88,13 @@ export function GameDialog({
   return (
     <Dialog open={dialogOpen} onOpenChange={handleDialogOpenChange}>
       <DialogTrigger asChild>
-        <Button variant="outline">Add Game</Button>
+        <Button
+          variant="outline"
+          className="bg-foreground/5 hover:bg-foreground/10 rounded-[9px] text-[12.5px] font-semibold"
+        >
+          <Plus />
+          Add game
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>

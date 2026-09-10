@@ -11,6 +11,7 @@ import { Input } from "@chron/components/ui/input";
 import { Label } from "@chron/components/ui/label";
 import { Textarea } from "@chron/components/ui/textarea";
 import { useCallback, useState } from "react";
+import { Plus } from "lucide-react";
 import { RadioGroup, RadioGroupItem } from "@chron/components/ui/radio-group";
 import { taskSchema, TaskType } from "@chron/lib/zod";
 import { useForm } from "react-hook-form";
@@ -66,7 +67,13 @@ export function TaskDialog({
   return (
     <Dialog open={dialogOpen} onOpenChange={handleDialogOpenChange}>
       <DialogTrigger asChild>
-        <Button variant="outline">Add Task</Button>
+        <Button
+          variant="ghost"
+          className="text-muted-foreground hover:text-foreground h-auto w-full rounded-[13px] border border-dashed py-3 text-[12.5px] font-semibold hover:border-solid hover:bg-foreground/5"
+        >
+          <Plus />
+          Add task
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

@@ -1,26 +1,14 @@
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@chron/components/ui/collapsible";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@chron/components/ui/card";
 import { useCallback, useEffect, useState } from "react";
-import { Button } from "@chron/components/ui/button";
-import { ChevronsDownUp, ChevronsUpDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import Task from "@chron/components/chron/task";
 import { TaskDialog } from "@chron/components/chron/add-task";
 import ResetTimer from "@chron/components/chron/reset-timer";
 import { v4 } from "uuid";
 import { TaskItem, TaskType } from "@chron/lib/task";
 import { GameItem } from "@chron/lib/game";
-import DeleteDialog from "@chron/components/chron/delete-item";
+import DeleteMenu from "@chron/components/chron/delete-menu";
 import { useTimer } from "@chron/components/chron/timer-context";
+import { cn } from "@chron/lib/utils";
 import { isAfter } from "date-fns";
 import { Spinner } from "@chron/components/ui/spinner";
 import {
@@ -177,69 +165,86 @@ export default function Game({
     }
   }, [tasks, currentTimestamp, sortTasks]);
 
+  const toggleOpen = useCallback(() => openGame(!open), [open, openGame]);
+
   return (
-    <Card>
-      <CardHeader className="flex-row items-center place-content-between">
-        <CardTitle>{game.title}</CardTitle>
-        <DeleteDialog
-          type="Game"
-          title={game.title}
-          deleteItem={() => deleteGame(game.id)}
-        />
-      </CardHeader>
-      <CardContent>
-        <Collapsible open={open} onOpenChange={openGame}>
-          <div className="flex flex-row place-items-center place-content-between">
-            <div className="flex flex-row place-items-center">
-              <CollapsibleTrigger asChild>
-                <Button variant="ghost" size="sm">
-                  {open ? (
-                    <ChevronsUpDown className="h-4 w-4" />
-                  ) : (
-                    <ChevronsDownUp className="h-4 w-4" />
-                  )}
-                  <span className="sr-only">Toggle</span>
-                </Button>
-              </CollapsibleTrigger>
-              <h4>{tasks.length} Tasks</h4>
-            </div>
-            <div>
-              <TaskDialog gameTitle={game.title} addTask={addTask} />
-            </div>
+    <div className="bg-card rounded-[18px] border">
+      <div
+        role="button"
+        tabIndex={0}
+        aria-expanded={open}
+        title="Expand or collapse"
+        onClick={toggleOpen}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            toggleOpen();
+          }
+        }}
+        className="focus-visible:ring-ring flex cursor-pointer items-stretch rounded-[18px] outline-hidden focus-visible:ring-2"
+      >
+        <div className="flex min-w-0 flex-1 flex-col gap-[18px] px-[22px] pt-[18px] pb-3.5">
+          <div className="min-w-0 text-[25px] leading-[1.15] font-semibold tracking-[-0.025em] text-pretty">
+            {game.title}
           </div>
-          <CollapsibleContent className="flex flex-col gap-2 pt-2">
-            {loading && <Spinner />}
-            {!loading &&
-              tasks.map((item) => (
-                <Task
-                  key={`task-${item.id}`}
-                  task={item}
-                  setDone={setDone}
-                  deleteTask={removeTask}
-                />
-              ))}
-          </CollapsibleContent>
-        </Collapsible>
-      </CardContent>
-      <CardFooter className="flex-col items-start">
-        <p>
-          Daily reset is{" "}
+          <div className="mt-auto flex items-center">
+            <ChevronDown
+              aria-hidden
+              className={cn(
+                "text-muted-foreground size-3.5 flex-none transition-transform duration-300 ease-[cubic-bezier(.2,.8,.2,1)]",
+                !open && "rotate-180"
+              )}
+            />
+            <div className="flex-1" />
+            <DeleteMenu
+              type="Game"
+              title={game.title}
+              deleteItem={() => deleteGame(game.id)}
+            />
+          </div>
+        </div>
+        {/* A weekly countdown runs to three hour digits, so the rail needs a
+            pixel floor. The percentage alone clips it in a narrow window. */}
+        <div className="flex w-[19%] max-w-1/2 min-w-[168px] flex-none flex-col border-l">
           <ResetTimer
             hour={game.dailyHour}
             minute={game.dailyMinute}
             setReset={setNextDaily}
+            className="border-b"
           />
-        </p>
-        <p>
-          Weekly reset is{" "}
           <ResetTimer
             hour={game.dailyHour}
             minute={game.dailyMinute}
             day={game.weeklyDay}
             setReset={setNextWeekly}
           />
-        </p>
-      </CardFooter>
-    </Card>
+        </div>
+      </div>
+
+      <div
+        className="grid transition-[grid-template-rows] duration-[360ms] ease-[cubic-bezier(.2,.8,.2,1)]"
+        style={{ gridTemplateRows: open ? "1fr" : "0fr" }}
+      >
+        {/* A collapsed list is only clipped, so its buttons stay focusable
+            without inert. */}
+        <div className="min-h-0 overflow-hidden" inert={!open}>
+          <div className="flex flex-col gap-2 px-3 pt-3.5 pb-3">
+            {loading && <Spinner />}
+            {!loading &&
+              tasks.map((item, i) => (
+                <Task
+                  key={`task-${item.id}`}
+                  task={item}
+                  index={i}
+                  open={open}
+                  setDone={setDone}
+                  deleteTask={removeTask}
+                />
+              ))}
+            <TaskDialog gameTitle={game.title} addTask={addTask} />
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
