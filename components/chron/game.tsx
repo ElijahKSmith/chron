@@ -173,7 +173,13 @@ export default function Game({
         role="button"
         tabIndex={0}
         aria-expanded={open}
-        onClick={toggleOpen}
+        onClick={(event) => {
+          // React sends a portal's synthetic events up the React tree. A
+          // portal node is not a DOM descendant, so contains() excludes them.
+          if (event.currentTarget.contains(event.target as Node)) {
+            toggleOpen();
+          }
+        }}
         onKeyDown={(event) => {
           if (event.key === "Enter" || event.key === " ") {
             event.preventDefault();
