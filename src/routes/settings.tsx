@@ -6,6 +6,7 @@ import {
   DropdownMenuTrigger,
 } from "@chron/components/ui/dropdown-menu";
 import { Button } from "@chron/components/ui/button";
+import SidebarToggle from "@chron/components/chron/sidebar-toggle";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import {
@@ -37,7 +38,8 @@ function Settings() {
   }, []);
 
   return (
-    <div className="flex flex-col gap-2 px-7">
+    <div className="flex flex-col gap-4">
+      <SidebarToggle />
       {isClient && (
         <Accordion
           type="multiple"

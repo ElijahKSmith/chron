@@ -1,6 +1,6 @@
 import { createRootRoute, Outlet } from "@tanstack/react-router";
 import { ThemeProvider } from "next-themes";
-import { SidebarProvider, SidebarTrigger } from "@chron/components/ui/sidebar";
+import { SidebarProvider } from "@chron/components/ui/sidebar";
 import ChronSidebar from "@chron/components/chron/sidebar";
 import { TimerProvider } from "@chron/components/chron/timer-context";
 import { SettingsProvider } from "@chron/components/chron/settings-context";
@@ -17,11 +17,8 @@ function RootLayout() {
         <TimerProvider>
           <SidebarProvider defaultOpen={false}>
             <ChronSidebar />
-            <main className="w-screen p-2">
-              <div className="flex flex-col gap-2">
-                <SidebarTrigger />
-                <Outlet />
-              </div>
+            <main className="flex w-screen flex-col gap-4 px-5 pt-4 pb-7">
+              <Outlet />
             </main>
           </SidebarProvider>
         </TimerProvider>

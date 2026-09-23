@@ -5,6 +5,7 @@ import { GameItem } from "@chron/lib/game";
 import { v4 } from "uuid";
 import { GameDialog } from "@chron/components/chron/add-game";
 import { Spinner } from "@chron/components/ui/spinner";
+import SidebarToggle from "@chron/components/chron/sidebar-toggle";
 import {
   getAllGames,
   createGame,
@@ -74,13 +75,16 @@ function Dashboard() {
 
   return (
     <>
-      <div className="flex fex-row place-content-end px-7">
+      <div className="flex flex-row items-center gap-3">
+        <SidebarToggle />
+        <div className="flex-1" />
         <GameDialog addGame={addGame} />
       </div>
-      <div className="flex flex-col gap-4 px-7 w-full"></div>
-      {games.map((game, i) => (
-        <Game key={`game-${i}`} game={game} deleteGame={removeGame} />
-      ))}
+      <div className="flex w-full flex-col gap-4">
+        {games.map((game) => (
+          <Game key={game.id} game={game} deleteGame={removeGame} />
+        ))}
+      </div>
     </>
   );
 }

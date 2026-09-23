@@ -1,5 +1,67 @@
 import { addDays, addWeeks, isAfter, parseISO, set, setDay } from "date-fns";
 
+const WEEKDAY_NAMES = [
+  "Sun",
+  "Mon",
+  "Tue",
+  "Wed",
+  "Thu",
+  "Fri",
+  "Sat",
+] as const;
+
+function toMillis(value: Date | number): number {
+  return value instanceof Date ? value.getTime() : value;
+}
+
+/**
+ * Formats the time left before a reset as `HH:MM:SS`.
+ *
+ * @param target The reset timestamp
+ * @param now The current timestamp
+ *
+ * @note The hour field is not capped at 24. A weekly countdown can read `128:04:11`.
+ */
+export function formatCountdown(
+  target: Date | number,
+  now: Date | number
+): string {
+  const remaining = Math.max(0, toMillis(target) - toMillis(now));
+
+  const totalSeconds = Math.floor(remaining / 1000);
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  return [hours, minutes, seconds]
+    .map((part) => part.toString().padStart(2, "0"))
+    .join(":");
+}
+
+/**
+ * Formats a reset timestamp as `HH:MM`, or as `Ddd HH:MM` with the weekday.
+ *
+ * @param reset The reset timestamp
+ * @param withWeekday True to prefix the weekday
+ *
+ * @note Takes the resolved reset, not the configured hour and minute.
+ * getTodayTimes shifts the configured time by the machine's UTC offset, so the
+ * two disagree everywhere except UTC.
+ */
+export function formatResetLabel(
+  reset: Date | number,
+  withWeekday = false
+): string {
+  const date = reset instanceof Date ? reset : new Date(reset);
+
+  const time = `${date.getHours().toString().padStart(2, "0")}:${date
+    .getMinutes()
+    .toString()
+    .padStart(2, "0")}`;
+
+  return withWeekday ? `${WEEKDAY_NAMES[date.getDay()]} ${time}` : time;
+}
+
 export function formatDailyTime(hours: number, minutes: number): string {
   return (
     hours.toString().padStart(2, "0") +
