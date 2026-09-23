@@ -167,12 +167,11 @@ export default function Game({
 
   const toggleOpen = useCallback(() => openGame(!open), [open, openGame]);
 
+  const taskListId = `game-${game.id}-tasks`;
+
   return (
     <div className="bg-card rounded-[18px] border">
       <div
-        role="button"
-        tabIndex={0}
-        aria-expanded={open}
         onClick={(event) => {
           // React sends a portal's synthetic events up the React tree. A
           // portal node is not a DOM descendant, so contains() excludes them.
@@ -180,26 +179,35 @@ export default function Game({
             toggleOpen();
           }
         }}
-        onKeyDown={(event) => {
-          if (event.key === "Enter" || event.key === " ") {
-            event.preventDefault();
-            toggleOpen();
-          }
-        }}
-        className="focus-visible:ring-ring flex cursor-pointer items-stretch rounded-[18px] outline-hidden focus-visible:ring-2"
+        className="flex cursor-pointer items-stretch rounded-[18px]"
       >
         <div className="flex min-w-0 flex-1 flex-col gap-[18px] px-[22px] pt-[18px] pb-3.5">
           <div className="min-w-0 text-[25px] leading-[1.15] font-semibold tracking-[-0.025em] text-pretty">
             {game.title}
           </div>
           <div className="mt-auto flex items-center">
-            <ChevronDown
-              aria-hidden
-              className={cn(
-                "text-muted-foreground size-3.5 flex-none transition-transform duration-300 ease-[cubic-bezier(.2,.8,.2,1)]",
-                !open && "rotate-180"
-              )}
-            />
+            <button
+              type="button"
+              aria-expanded={open}
+              aria-controls={taskListId}
+              onClick={(event) => {
+                event.stopPropagation();
+                toggleOpen();
+              }}
+              className="focus-visible:ring-ring -ml-[7px] grid size-7 flex-none place-items-center rounded-lg outline-hidden focus-visible:ring-2"
+            >
+              {/* Design 6a points the chevron up when the card is collapsed. */}
+              <ChevronDown
+                aria-hidden
+                className={cn(
+                  "text-muted-foreground size-3.5 transition-transform duration-300 ease-[cubic-bezier(.2,.8,.2,1)]",
+                  !open && "rotate-180"
+                )}
+              />
+              <span className="sr-only">
+                {open ? "Collapse" : "Expand"} {game.title}
+              </span>
+            </button>
             <div className="flex-1" />
             <DeleteMenu
               type="Game"
@@ -227,6 +235,7 @@ export default function Game({
       </div>
 
       <div
+        id={taskListId}
         className="grid transition-[grid-template-rows] duration-[360ms] ease-[cubic-bezier(.2,.8,.2,1)]"
         style={{ gridTemplateRows: open ? "1fr" : "0fr" }}
       >

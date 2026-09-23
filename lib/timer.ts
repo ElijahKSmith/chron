@@ -39,26 +39,27 @@ export function formatCountdown(
 }
 
 /**
- * Formats the configured reset time as `HH:MM`, or as `Ddd HH:MM` for a weekly reset.
+ * Formats a reset timestamp as `HH:MM`, or as `Ddd HH:MM` with the weekday.
  *
- * @param hours Hour of the day (0-23)
- * @param minutes Minute of the hour (0-59)
- * @param day Day of the week (0-6), where 0 is Sunday
+ * @param reset The reset timestamp
+ * @param withWeekday True to prefix the weekday
+ *
+ * @note Takes the resolved reset, not the configured hour and minute.
+ * getTodayTimes shifts the configured time by the machine's UTC offset, so the
+ * two disagree everywhere except UTC.
  */
 export function formatResetLabel(
-  hours: number,
-  minutes: number,
-  day?: number
+  reset: Date | number,
+  withWeekday = false
 ): string {
-  const time = `${hours.toString().padStart(2, "0")}:${minutes
+  const date = reset instanceof Date ? reset : new Date(reset);
+
+  const time = `${date.getHours().toString().padStart(2, "0")}:${date
+    .getMinutes()
     .toString()
     .padStart(2, "0")}`;
 
-  if (typeof day !== "number") {
-    return time;
-  }
-
-  return `${WEEKDAY_NAMES[day] ?? ""} ${time}`.trim();
+  return withWeekday ? `${WEEKDAY_NAMES[date.getDay()]} ${time}` : time;
 }
 
 export function formatDailyTime(hours: number, minutes: number): string {

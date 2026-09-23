@@ -60,8 +60,8 @@ export default function ResetTimer({
       >
         {formatCountdown(resetTime, currentTimestamp)}
       </div>
-      <div className="text-muted-foreground/80 text-[10.5px] whitespace-nowrap">
-        resets {formatResetLabel(hour, minute, day)}
+      <div className="text-muted-foreground text-[10.5px] whitespace-nowrap">
+        resets {formatResetLabel(resetTime, isWeekly)}
       </div>
     </div>
   );
