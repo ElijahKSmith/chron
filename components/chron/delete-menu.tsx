@@ -46,7 +46,6 @@ export default function DeleteMenu({
         <DropdownMenuContent
           align="end"
           className="min-w-[170px] rounded-[11px] p-1.5"
-          onClick={(event) => event.stopPropagation()}
         >
           <DropdownMenuItem
             className="rounded-[7px] px-2.5 py-2 font-medium text-destructive focus:bg-destructive/10 focus:text-destructive"

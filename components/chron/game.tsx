@@ -173,7 +173,6 @@ export default function Game({
         role="button"
         tabIndex={0}
         aria-expanded={open}
-        title="Expand or collapse"
         onClick={toggleOpen}
         onKeyDown={(event) => {
           if (event.key === "Enter" || event.key === " ") {
@@ -205,7 +204,7 @@ export default function Game({
         </div>
         {/* A weekly countdown runs to three hour digits, so the rail needs a
             pixel floor. The percentage alone clips it in a narrow window. */}
-        <div className="flex w-[19%] max-w-1/2 min-w-[168px] flex-none flex-col border-l">
+        <div className="flex w-[19%] min-w-[168px] flex-none flex-col border-l">
           <ResetTimer
             hour={game.dailyHour}
             minute={game.dailyMinute}
@@ -225,15 +224,15 @@ export default function Game({
         className="grid transition-[grid-template-rows] duration-[360ms] ease-[cubic-bezier(.2,.8,.2,1)]"
         style={{ gridTemplateRows: open ? "1fr" : "0fr" }}
       >
-        {/* A collapsed list is only clipped, so its buttons stay focusable
-            without inert. */}
+        {/* The grid clips a collapsed list, it does not unmount it. Without
+            inert the hidden buttons keep taking tab focus. */}
         <div className="min-h-0 overflow-hidden" inert={!open}>
           <div className="flex flex-col gap-2 px-3 pt-3.5 pb-3">
             {loading && <Spinner />}
             {!loading &&
               tasks.map((item, i) => (
                 <Task
-                  key={`task-${item.id}`}
+                  key={item.id}
                   task={item}
                   index={i}
                   open={open}

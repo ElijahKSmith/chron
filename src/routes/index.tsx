@@ -5,7 +5,7 @@ import { GameItem } from "@chron/lib/game";
 import { v4 } from "uuid";
 import { GameDialog } from "@chron/components/chron/add-game";
 import { Spinner } from "@chron/components/ui/spinner";
-import { SidebarTrigger } from "@chron/components/ui/sidebar";
+import SidebarToggle from "@chron/components/chron/sidebar-toggle";
 import {
   getAllGames,
   createGame,
@@ -76,7 +76,7 @@ function Dashboard() {
   return (
     <>
       <div className="flex flex-row items-center gap-3">
-        <SidebarTrigger className="text-muted-foreground hover:text-foreground bg-foreground/5 hover:bg-foreground/10 size-[30px] rounded-[9px]" />
+        <SidebarToggle />
         <div className="flex-1" />
         <GameDialog addGame={addGame} />
       </div>

@@ -43,7 +43,7 @@ export default function Task({
           type="button"
           title="Mark incomplete"
           onClick={() => setDone(task.id, false)}
-          className="bg-incomplete/12 hover:bg-incomplete/28 text-incomplete grid h-7 w-8 place-items-center transition-colors"
+          className="bg-incomplete/15 hover:bg-incomplete/30 text-incomplete grid h-7 w-8 place-items-center transition-colors"
         >
           <X className="size-3" strokeWidth={2} />
           <span className="sr-only">Mark Undone</span>

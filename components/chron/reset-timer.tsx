@@ -1,4 +1,4 @@
-import { memo, useEffect } from "react";
+import { useEffect } from "react";
 import {
   formatCountdown,
   formatDailyTime,
@@ -13,10 +13,8 @@ import { cn } from "@chron/lib/utils";
  * @param hour Hour of the day (0-23)
  * @param minute Minute of the hour (0-59)
  * @param day Day of the week (0-6), where 0 is Sunday
- *
- * @note See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#date_time_string_format
  */
-const ResetTimer = memo(function ResetTimer({
+export default function ResetTimer({
   hour,
   minute,
   day,
@@ -33,8 +31,8 @@ const ResetTimer = memo(function ResetTimer({
 
   const isWeekly = typeof day === "number";
 
-  // getNextDailyReset and getNextWeeklyReset read the wall clock, so the result
-  // is computed on every tick instead of being memoized on the inputs.
+  // getNextDailyReset and getNextWeeklyReset read the wall clock. The result
+  // is therefore recomputed on every render, not memoized on hour and minute.
   const dailyTime = formatDailyTime(hour, minute);
   const resetTime = (
     isWeekly ? getNextWeeklyReset(dailyTime, day) : getNextDailyReset(dailyTime)
@@ -67,6 +65,4 @@ const ResetTimer = memo(function ResetTimer({
       </div>
     </div>
   );
-});
-
-export default ResetTimer;
+}
