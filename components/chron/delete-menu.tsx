@@ -12,8 +12,8 @@ import { cn } from "@chron/lib/utils";
 /**
  * The 3-dots menu that houses the delete action for a game or a task.
  *
- * @note Both the trigger and the content stop click propagation, because a
- * game header is a click target. React routes a portal's events up its tree.
+ * @note The trigger stops click propagation because a game header is a click
+ * target and the trigger is a real descendant. The header guards the portals.
  */
 export default function DeleteMenu({
   type,
@@ -46,7 +46,6 @@ export default function DeleteMenu({
         <DropdownMenuContent
           align="end"
           className="min-w-[170px] rounded-[11px] p-1.5"
-          onClick={(event) => event.stopPropagation()}
         >
           <DropdownMenuItem
             className="rounded-[7px] px-2.5 py-2 font-medium text-destructive focus:bg-destructive/10 focus:text-destructive"
