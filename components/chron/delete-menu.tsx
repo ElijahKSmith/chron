@@ -12,8 +12,11 @@ import { cn } from "@chron/lib/utils";
 /**
  * The 3-dots menu that houses the delete action for a game or a task.
  *
- * @note The trigger stops click propagation because a game header is itself a
- * click target that expands and collapses the card.
+ * @note A game header is itself a click target that expands and collapses the
+ * card, so the trigger and the menu content both stop click propagation. The
+ * menu content needs its own handler even though Radix renders it through a
+ * portal. React sends a synthetic event up the React tree, not up the DOM
+ * tree, so a click on the menu item still reaches the header handler.
  */
 export default function DeleteMenu({
   type,
@@ -46,6 +49,7 @@ export default function DeleteMenu({
         <DropdownMenuContent
           align="end"
           className="min-w-[170px] rounded-[11px] p-1.5"
+          onClick={(event) => event.stopPropagation()}
         >
           <DropdownMenuItem
             className="rounded-[7px] px-2.5 py-2 font-medium text-destructive focus:bg-destructive/10 focus:text-destructive"
