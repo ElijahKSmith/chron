@@ -196,7 +196,6 @@ export default function Game({
               }}
               className="focus-visible:ring-ring -ml-[7px] grid size-7 flex-none place-items-center rounded-lg outline-hidden focus-visible:ring-2"
             >
-              {/* Design 6a points the chevron up when the card is collapsed. */}
               <ChevronDown
                 aria-hidden
                 className={cn(
